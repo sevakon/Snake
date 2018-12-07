@@ -1,0 +1,94 @@
+<html>
+<head>
+
+<title>Snake</title>
+</head>
+
+<body>
+<canvas id = "gc" width="400" height="400"></canvas>
+<script>
+window.onload = function() {
+    canv = document.getElementById("gc");
+    ctx = canv.getContext("2d");
+    document.addEventListener("keydown",keyPush);
+    setInterval(game, 1000/15);
+}
+score = 0;
+xPosition = 10;
+yPosition = 10;
+xApplePosition = 15;
+yApplePosition = 15;
+xVelocity = 0;
+yVelocity = 0;
+trail = [];
+tail = 5;
+function game() {
+    xPosition += xVelocity;
+    yPosition += yVelocity;
+    if(xPosition < 0) {
+        xPosition = 19;
+    }
+    if(xPosition > 19) {
+        xPosition = 0;
+    }
+    if(yPosition < 0) {
+        yPosition = 19;
+    }
+    if(yPosition > 19) {
+        yPosition = 0;
+    }
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canv.width, canv.height);
+    ctx.fillStyle = "lime";
+    for(var i = 0; i < trail.length; i++) {
+        ctx.fillRect(trail[i].x*20, trail[i].y*20, 19, 19);
+        if(trail[i].x == xPosition && trail[i].y == yPosition) {
+            tail = 5;
+        }
+    }
+    trail.push({x:xPosition, y:yPosition});
+    while(trail.length > tail) {
+    trail.shift();
+    }
+ 
+    if(xApplePosition == xPosition && yApplePosition == yPosition) {
+        tail++;
+        xApplePosition = Math.floor(Math.random()*20);
+        yApplePosition = Math.floor(Math.random()*20);
+		score += 10;
+    }
+    ctx.fillStyle = "red";
+    ctx.fillRect(xApplePosition*20, yApplePosition*20, 18, 18);
+	ctx.font = "20px Courier";
+	ctx.fillStyle = "lime";
+	ctx.fillText("Score: " + score, 270, 15);
+	ctx.fillText("@sevaforreal", 3, 395);
+}
+function keyPush(evt) {
+    switch(evt.keyCode) {
+        case 37:
+            xVelocity = -1;
+			yVelocity = 0;
+            break;
+        case 38:
+            xVelocity = 0;
+			yVelocity = -1;
+            break;
+        case 39:
+            xVelocity = 1;
+			yVelocity = 0;
+            break;
+        case 40:
+            xVelocity = 0;
+			yVelocity = 1;
+            break;
+        case 32:
+            xVelocity = 0;
+			yVelocity = 0;
+            break;		
+    }
+}
+
+</script>
+</body>
+</html>
